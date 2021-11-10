@@ -1,16 +1,14 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
 load_dotenv()
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
-
 
 ALLOWED_HOSTS = []
 
@@ -54,7 +52,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -65,9 +62,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -84,8 +78,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Minsk'
@@ -95,7 +87,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

@@ -1,11 +1,13 @@
 from django.db import models
+from django.db.models import QuerySet
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 
 
 class PublishedOnlyManager(models.Manager):
-    '''A customized object manager'''
-    def get_queryset(self):
+
+    def get_queryset(self) -> QuerySet:
         return super().get_queryset().filter(status='published')
 
 
@@ -33,3 +35,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self) -> str:
+        return reverse('blog:post_detail', args=[self.publish.year,
+                                                 self.publish.month,
+                                                 self.publish.day,
+                                                 self.slug])
