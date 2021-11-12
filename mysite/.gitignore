@@ -1,8 +1,7 @@
-django3-by-example-venv/
+django3-by-example-venv
 __pycache__
-../.idea/
 ../.idea
 *.pyc
 .env
 mysite/db.sqlite3
-.idea/
+
