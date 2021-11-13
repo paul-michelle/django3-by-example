@@ -3,13 +3,21 @@
     src: url('../SpecialElite-Regular.ttf');
 }
 html {
-    background:#9b9b9b;
+    height: 100%;
+}
+
+.bg {
+    background-image: url('../bg_image.jpg');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 body {
     margin:0;
     padding:0;
     font-family:SpecialElite-Regular;
-    background:#9b9b9b;
+    --bs-body-bg: transparent;
 }
 
 a {
@@ -25,6 +33,7 @@ h1 {
 
 h2 {
     font-weight:normal;
+    margin: 30px 0 15px 0;
 }
 
 #content {
@@ -42,13 +51,11 @@ p.date {
     font-size: 12px;
 }
 
-/* pagination */
 .pagination {
     margin:40px 0;
     font-weight:bold;
 }
 
-/* forms */
 label {
     float:left;
     clear:both;
@@ -75,15 +82,11 @@ input[type=submit] {
     padding-left:10px;
 }
 
-/* comments */
 .comment {
     padding:10px;
 }
-.comment:nth-child(even) {
-    background:#efefef;
-}
+
 .comment .info {
     font-weight:bold;
     font-size:12px;
-    color:#666;
 }
