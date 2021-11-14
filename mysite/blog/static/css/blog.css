@@ -102,7 +102,7 @@ input[type=submit] {
 
 input[type=submit].submit_button {
     padding: 15px;
-    background: url('../anchor_013.png');
+    background: url('../submit_icon.png');
     height: auto;
     background-position: center;
     background-repeat: no-repeat;
