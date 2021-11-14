@@ -45,7 +45,7 @@
     <form method="POST">
         {{ comment_form.as_p }}
         {% csrf_token %}
-        <input type="submit" value="" class="comment_button">
+        <input type="submit" value="" class="submit_button">
     </form>
 {% endif %}
 {% if new_comment %}

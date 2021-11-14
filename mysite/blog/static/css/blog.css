@@ -46,8 +46,8 @@ h2 {
     padding:0 0 0 30px;
 }
 #sidebar {
-    margin: 40px;
-    padding: 30px;
+    margin: 10px 40px 40px;
+    padding: 10px 30px 30px;
     text-align: center;
 }
 
@@ -100,7 +100,7 @@ input[type=submit] {
     color: #b6b6b8;
 }
 
-input[type=submit].comment_button {
+input[type=submit].submit_button {
     padding: 15px;
     background: url('../anchor_013.png');
     height: auto;
