@@ -19,7 +19,7 @@
         <div class="col-4">
             <div id="sidebar">
                 {% block sidebar%}
-                <h2>My blog</h2>
+                <a href="{% url 'blog:post_list' %}"><h2>My blog</h2></a>
                 <p>Counterintuitive happens... Never mind :)</p>
                 {% endblock sidebar%}
             </div>

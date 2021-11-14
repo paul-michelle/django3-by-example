@@ -3,10 +3,14 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail
+from django.db.models import Count
 from django.views.generic import ListView
 from .forms import EmailPostForm, CommentForm
 from .models import Post, Comment
 from taggit.models import Tag
+
+POSTS_TO_SHOW_ON_PAGE = 3
+POSTS_TO_RECOMMEND = 3
 
 
 def post_list(request: wsgi.WSGIRequest, tag_slug: str = None) -> HttpResponse:
@@ -15,7 +19,7 @@ def post_list(request: wsgi.WSGIRequest, tag_slug: str = None) -> HttpResponse:
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         post_objects = post_objects.filter(tags__in=[tag])
-    paginator = Paginator(post_objects, 3)
+    paginator = Paginator(post_objects, POSTS_TO_SHOW_ON_PAGE)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -50,8 +54,14 @@ def post_detail(request: wsgi.WSGIRequest, year: int, month: int, day: int,
 
     if request.method == "GET":
         comment_form = CommentForm
-    return render(request, 'blog/post/detail.html', {'post': post, 'comments': comments,
-                                                     'new_comment': new_comment, 'comment_form': comment_form})
+
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')) \
+        .order_by('-same_tags', '-publish')[:POSTS_TO_RECOMMEND]
+
+    return render(request, 'blog/post/detail.html', {'post': post, 'comments': comments, 'new_comment': new_comment,
+                                                     'comment_form': comment_form, 'similar_posts': similar_posts})
 
 
 def post_share(request: wsgi.WSGIRequest, post_id: int) -> HttpResponse:

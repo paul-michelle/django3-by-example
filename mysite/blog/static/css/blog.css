@@ -8,7 +8,7 @@ html {
 
 .bg {
     background-image: url('../bg_image.jpg');
-    height: 100%;
+    height: auto;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -23,6 +23,10 @@ body {
 a {
     text-decoration:none;
     color: black;
+}
+
+p {
+    color: #000000;
 }
 
 h1 {
@@ -49,6 +53,7 @@ h2 {
 
 p.date {
     font-size: 12px;
+    border-bottom: 1px solid #b6b6b8;;
 }
 
 .pagination {
@@ -89,4 +94,17 @@ input[type=submit] {
 .comment .info {
     font-weight:bold;
     font-size:12px;
+}
+
+.bottom {
+    color: #b6b6b8;
+}
+
+input[type=submit].comment_button {
+    padding: 15px;
+    background: url('../anchor_013.png');
+    height: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
