@@ -1,0 +1,5 @@
+django3-by-example-venv/
+.idea
+.env
+__pycache__
+*.py[c]
