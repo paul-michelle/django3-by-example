@@ -22,11 +22,14 @@
                 {% block sidebar%}
                 <a href="{% url 'blog:post_list' %}"><h2>My blog</h2></a>
                 <p>Counterintuitive? <br> Oftentimes it happens... <br> Never mind :)</p>
-
                 <p>Posts published: {% posts_total %}</p>
-                <br>
 
-                <h3>Latest posts</h3>
+                <h3>Look<br>for Publications</h3>
+                <form action="{% url 'blog:post_search' %}" method="get">
+                    <input type="text" name="user_request" placeholder="what are u lookin' for?"><br>
+                    <input type="submit" value="" class="submit_button">
+                </form>
+                <h3>Latest</h3>
                 <p>{% get_latest_posts 3 %}</p>
                 <br>
 
@@ -41,7 +44,7 @@
 
                 <p>
                     <a href="{% url 'blog:post_feed' %}">
-                <h4>Subscribe <br>to RSS feed</h4></a>
+                <h3>Subscribe <br>to RSS feed</h3></a>
                 </p>
                 {% endblock sidebar%}
             </div>

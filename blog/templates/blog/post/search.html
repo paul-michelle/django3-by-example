@@ -1,0 +1,23 @@
+{% extends 'blog/post/list.html' %}
+{% load blog_tags %}
+
+{% block title %}
+Search results
+{% endblock title %}
+
+{% block content %}
+
+    <h1>Searching results on your query</h1>
+
+    {% if number_of_posts %}
+    <h3>{{ number_of_posts }} post{{  number_of_posts|pluralize }} found: </h3>
+
+    {% block list_of_posts %}
+    {{block.super}}
+    {% endblock list_of_posts %}
+
+    {% else %}
+    <p>No posts matching your query :( </p>
+    {% endif %}
+
+{% endblock content %}

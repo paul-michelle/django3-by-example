@@ -25,6 +25,7 @@ def get_latest_posts(count: int = LATEST_POSTS_COUNT) -> Dict[str, QuerySet]:
 def get_popular_posts(count: int = POPULAR_POSTS_COUNT) -> QuerySet:
     return Post.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:count]
 
+
 @register.filter(name='markdown')
 def markdown_format(text):
     formatted_text = markdown(text)
