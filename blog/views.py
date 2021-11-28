@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail
 from django.db.models import Count
 from django.views.generic import ListView
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import TrigramSimilarity
 from .forms import (
     EmailPostForm, CommentForm
 )
@@ -14,29 +14,11 @@ from taggit.models import Tag
 
 POSTS_TO_SHOW_ON_PAGE = 3
 POSTS_TO_RECOMMEND = 3
+WORDS_SIMILARITY_THRESHOLD = .055
 
 
-def post_list(request: wsgi.WSGIRequest, tag_slug: str = None) -> HttpResponse:
-    post_objects = None
-    template = None
-
-    search_request_received = request.GET.get('user_request', '')
-    if search_request_received:
-        post_objects = Post.published.annotate(search=SearchVector('title', 'body')
-                                               ).filter(search=search_request_received)
-        template = 'blog/post/search.html'
-
-    if not search_request_received:
-        post_objects = Post.published.all()
-        template = 'blog/post/list.html'
-
-    number_of_posts = post_objects.count()
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        post_objects = post_objects.filter(tags__in=[tag])
-
-    paginator = Paginator(post_objects, POSTS_TO_SHOW_ON_PAGE)
+def paginate(request, total_posts, posts_per_page):
+    paginator = Paginator(total_posts, posts_per_page)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -44,9 +26,38 @@ def post_list(request: wsgi.WSGIRequest, tag_slug: str = None) -> HttpResponse:
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
+    return page, posts
 
-    return render(request, template, {'page': page, 'posts': posts, 'tag': tag,
-                                      'number_of_posts': number_of_posts})
+
+def post_list(request: wsgi.WSGIRequest, tag_slug: str = None) -> HttpResponse:
+    post_objects = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_objects = post_objects.filter(tags__in=[tag])
+    page, posts = paginate(request, post_objects, posts_per_page=POSTS_TO_SHOW_ON_PAGE)
+    return render(request, 'blog/post/list.html', {'page': page, 'posts': posts, 'tag': tag})
+
+
+class Searcher:
+
+    def __init__(self):
+        self._post_objects = None
+
+    def search_list(self, request: wsgi.WSGIRequest) -> HttpResponse:
+        search_request_received = request.GET.get('user_request', '')
+        if not self._post_objects:
+            self._post_objects = Post.published.annotate(
+                similarity=TrigramSimilarity('title', search_request_received)
+            ).filter(similarity__gt=WORDS_SIMILARITY_THRESHOLD).order_by('-similarity')
+        page, posts = paginate(request, self._post_objects, POSTS_TO_SHOW_ON_PAGE)
+        total_found = self._post_objects.count()
+        if not posts.has_next():
+            self._post_objects = None
+        return render(request, 'blog/post/search.html', {'page': page, 'posts': posts, 'total_found': total_found})
+
+
+searcher = Searcher()
 
 
 # class PostListView(ListView):

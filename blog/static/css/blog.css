@@ -108,3 +108,8 @@ input[type=submit].submit_button {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+input[type=text].search_box {
+    width: 100% ;
+    text-align: center ;
+}
